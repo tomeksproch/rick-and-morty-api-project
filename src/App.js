@@ -1,23 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import Card from './components/Card/Card';
+import Filter from './components/Filter/FIlter';
 
 function App() {
+  const api = `https://rickandmortyapi.com/api/character/?page=1`;
+  const [fetchedData, updateFetchedData] = useState([]);
+  const { info, results } = fetchedData;
+
+  useEffect(() => {
+    (async function () {
+      let data = await fetch(api).then(res => res.json());
+      updateFetchedData(data);
+    })();
+  }, [api]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Characters</h1>
+      <div>
+        <div className="row">
+          <Filter />
+          <div>
+            <Card results={results} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
